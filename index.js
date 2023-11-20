@@ -9,26 +9,29 @@ import categoryRouter from "./routes/category.js";
 import itemRouter from "./routes/item.js";
 import orderRouter from "./routes/order.js";
 import vendorRouter from "./routes/vendor.js";
-import dynamicPdfRouter from "./routes/dynPdf.js"
-import workOrderRouter from "./routes/workOrder.js"
-import purchaseOrderRouter from "./routes/purchaseOrder.js"
-import inwardArchiveRouter from "./routes/inwardArchive.js"
+import dynamicPdfRouter from "./routes/dynPdf.js";
+import workOrderRouter from "./routes/workOrder.js";
+import purchaseOrderRouter from "./routes/purchaseOrder.js";
+import inwardArchiveRouter from "./routes/inwardArchive.js";
 import cors from "cors";
-import cron from "node-cron"
-import { moveToInwardArchive, moveToOrderArchive } from "./controllers/order.js";
+import cron from "node-cron";
+import {
+  moveToInwardArchive,
+  moveToOrderArchive,
+} from "./controllers/order.js";
 
 const app = express();
 config({ path: "./config/config.env" });
 connectDB();
 
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({ limit: "10mb" }));
 app.use(urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
   cors({
-    origin:process.env.FRONTEND_URL,
-    credentials:true,
-    methods:["GET","POST","PUT","DELETE"]
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
   })
 );
 
@@ -48,9 +51,15 @@ app.get("/api/:month", (req, res) => {
     });
 });
 
-  cron.schedule(('* * * * * *'),moveToInwardArchive)
+app.get("/", (req, res) => {
+  res.status(200).json({
+    message: "Hello",
+  });
+});
 
-  cron.schedule(('* * * * * *'),moveToOrderArchive)
+cron.schedule("* * * * * *", moveToInwardArchive);
+
+cron.schedule("* * * * * *", moveToOrderArchive);
 
 app.use("/api/v1", router);
 app.use("/api/v1", productRouter);
