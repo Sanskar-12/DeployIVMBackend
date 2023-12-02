@@ -14,6 +14,10 @@ const schema = new mongoose.Schema({
     waranty: String,
     delivery: String,
   },
+  createdAt:{
+    type:Date,
+    default:Date.now()
+  }
 });
 
 export const Purchaseorder = mongoose.model("Purchaseorder", schema);

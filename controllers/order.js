@@ -38,7 +38,7 @@ export const getallOrders = async (req, res, next) => {
     //   .pagination(resultPerPage);
 
     // let orders = await apifeature.query;
-    let orders = await Orders.find({});
+    let orders = await Orders.find({}).sort({ createdBy: -1 });
 
     orders = orders.filter((item) => item.orderaction === "none");
 
@@ -62,7 +62,7 @@ export const getallOrdersforIntiatorSuperAdminandAdmin = async (
   next
 ) => {
   try {
-    let orders = await Orders.find({});
+    let orders = await Orders.find({}).sort({ createdBy: -1 });
 
     res.status(200).json({
       success: true,
@@ -180,7 +180,7 @@ export const getallOrderById = async (req, res, next) => {
 
 export const getApprovedOrder = async (req, res, next) => {
   try {
-    const order = await Orders.find();
+    const order = await Orders.find().sort({ createdBy: -1 });
 
     const approvedOrder = order.filter(
       (item) => item.orderaction === "Approved"
@@ -200,7 +200,7 @@ export const getApprovedOrder = async (req, res, next) => {
 
 export const getRejectedOrder = async (req, res, next) => {
   try {
-    const order = await Orders.find();
+    const order = await Orders.find().sort({ createdBy: -1 });
 
     const rejectedOrder = order.filter(
       (item) =>
@@ -244,7 +244,7 @@ export const processOrder = async (req, res, next) => {
 
 export const ApproverOrder = async (req, res, next) => {
   try {
-    const order = await Orders.find({});
+    const order = await Orders.find({}).sort({ createdBy: -1 });
 
     const orders = order.filter(
       (item) =>
@@ -328,7 +328,7 @@ export const RejectOrderforApprover = async (req, res, next) => {
 
 export const InwardOrders = async (req, res, next) => {
   try {
-    const order = await Orders.find({});
+    const order = await Orders.find({}).sort({ createdBy: -1 });
 
     if (!order) {
       res.status(400).json({
@@ -437,7 +437,7 @@ export const moveToOrderArchive = async (req, res, next) => {
 
 export const orderArchive=async(req,res,next)=>{
   try {
-      const orders=await Orders.find({})
+      const orders=await Orders.find({}).sort({ createdBy: -1 })
 
       let archivedOrders=orders.filter((item)=>item.orderArchived==="true")
 
@@ -450,5 +450,24 @@ export const orderArchive=async(req,res,next)=>{
           success:false,
           message:error.message
       })
+  }
+}
+
+export const inventoryProducts=async(req,res,next)=>{
+  try {
+    const orders=await Orders.find({}).sort({createdBy:-1})
+
+    let products=orders.filter((item)=>item.orderStatus==="Receieved")
+
+    res.status(200).json({
+      success:true,
+      products
+    })
+
+  } catch (error) {
+    res.status(400).json({
+      success:false,
+      message:error.message
+  })
   }
 }

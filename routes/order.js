@@ -1,7 +1,7 @@
 import express from "express" 
 
 import { isAuthenticated } from "../middlewares/auth.js"
-import { AcceptOrder, AcceptOrderforApprover, ApproverOrder, InwardOrders, RejectOrder, RejectOrderforApprover, changeStatus, createOrder, filterOrder, getApprovedOrder, getRejectedOrder, getallOrderById, getallOrders, getallOrdersforIntiatorSuperAdminandAdmin, moveToInwardArchive, moveToOrderArchive, orderArchive, processOrder } from "../controllers/order.js"
+import { AcceptOrder, AcceptOrderforApprover, ApproverOrder, InwardOrders, RejectOrder, RejectOrderforApprover, changeStatus, createOrder, filterOrder, getApprovedOrder, getRejectedOrder, getallOrderById, getallOrders, getallOrdersforIntiatorSuperAdminandAdmin, inventoryProducts, moveToInwardArchive, moveToOrderArchive, orderArchive, processOrder } from "../controllers/order.js"
 
 const router=express.Router()
 
@@ -23,5 +23,6 @@ router.put("/change/status/:id",isAuthenticated,changeStatus)
 router.put("/move/to/inward/archive",isAuthenticated,moveToInwardArchive)
 router.put("/move/to/order/archive",isAuthenticated,moveToOrderArchive)
 router.get("/get/order/archive",isAuthenticated,orderArchive)
+router.get("/get/inventory/products",isAuthenticated,inventoryProducts)
 
 export default router
